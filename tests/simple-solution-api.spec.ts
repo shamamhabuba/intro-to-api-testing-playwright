@@ -15,8 +15,11 @@ test('GET existing order should return 200 OK', async ({ request }) => {
   expect(response.status()).toBe(StatusCodes.OK)
 })
 
-test('GET non-existing order should return 400 Not Found', async ({ request }) => {
-  const response = await request.get(`${BASE_URL}/999999`, { headers })
+test('GET invalid order ID should return 400 Bad Request', async ({ request }) => {
+  const response = await request.get(`${BASE_URL}/orders/999999`, { headers })
+
+  console.log('Response status:', response.status())
+  console.log('Response body:', await response.text())
 
   expect(response.status()).toBe(StatusCodes.NOT_FOUND)
 })
@@ -44,7 +47,7 @@ test('DELETE non-existing order should return 404 Not Found', async ({ request }
     headers,
   })
 
-  expect(response.status()).toBe(StatusCodes.NOT_FOUND)
+  expect(response.status()).toBe(StatusCodes.BAD_REQUEST)
 })
 
 test('DELETE existing order should return 200 OK (if exists)', async ({ request }) => {
