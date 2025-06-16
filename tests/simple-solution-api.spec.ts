@@ -1,25 +1,25 @@
-import { expect, test } from '@playwright/test';
-import { StatusCodes } from 'http-status-codes';
+import { expect, test } from '@playwright/test'
+import { StatusCodes } from 'http-status-codes'
 
-const BASE_URL = 'https://backend.tallinn-learning.ee/test-orders';
-const API_KEY = '1234567890123456';
+const BASE_URL = 'https://backend.tallinn-learning.ee/test-orders'
+const API_KEY = '1234567890123456'
 
 const headers = {
-  'api_key': API_KEY,
-};
+  api_key: API_KEY,
+}
 
 test('GET existing order should return 200 OK', async ({ request }) => {
-  const response = await request.get(`${BASE_URL}/1`, { headers });
+  const response = await request.get(`${BASE_URL}/1`, { headers })
 
-  console.log(await response.json());
-  expect(response.status()).toBe(StatusCodes.OK);
-});
+  console.log(await response.json())
+  expect(response.status()).toBe(StatusCodes.OK)
+})
 
 test('GET non-existing order should return 400 Not Found', async ({ request }) => {
-  const response = await request.get(`${BASE_URL}/999999`, { headers });
+  const response = await request.get(`${BASE_URL}/999999`, { headers })
 
-  expect(response.status()).toBe(StatusCodes.NOT_FOUND);
-});
+  expect(response.status()).toBe(StatusCodes.NOT_FOUND)
+})
 
 test('PUT update existing order should return 200 OK', async ({ request }) => {
   const requestBody = {
@@ -29,31 +29,29 @@ test('PUT update existing order should return 200 OK', async ({ request }) => {
     customerPhone: '123456789',
     comment: 'Updated comment',
     id: 1,
-  };
+  }
 
   const response = await request.put(`${BASE_URL}/1`, {
     headers,
     data: requestBody,
-  });
+  })
 
-  expect(response.status()).toBe(StatusCodes.OK);
-});
+  expect(response.status()).toBe(StatusCodes.OK)
+})
 
 test('DELETE non-existing order should return 404 Not Found', async ({ request }) => {
   const response = await request.delete(`${BASE_URL}/999999`, {
     headers,
-  });
+  })
 
-  expect(response.status()).toBe(StatusCodes.NOT_FOUND);
-});
+  expect(response.status()).toBe(StatusCodes.NOT_FOUND)
+})
 
 test('DELETE existing order should return 200 OK (if exists)', async ({ request }) => {
   const response = await request.delete(`${BASE_URL}/1`, {
     headers,
-  });
+  })
 
-  console.log(response.status());
-  expect(
-    [StatusCodes.OK, StatusCodes.NOT_FOUND].includes(response.status())
-  ).toBeFalsy();
-});
+  console.log(response.status())
+  expect([StatusCodes.OK, StatusCodes.NOT_FOUND].includes(response.status())).toBeFalsy()
+})
